@@ -35,15 +35,7 @@ public class SecurityConfig {
             
             // 3. HTTP 요청 인가 규칙 설정
             .authorizeHttpRequests(authorize -> authorize
-                // ⚠️ (1) 로그인/회원가입 API 허용
-                .requestMatchers("/api/auth/**").permitAll()
-                
-                // 🚀 (2) 클래스 목록 API 허용 (ClassController 경로)
-                .requestMatchers("/api/classes/**").permitAll() 
-                .requestMatchers("/api/reservations/**").permitAll()
-                
-                // ⚠️ 그 외 나머지 모든 요청은 반드시 인증이 필요함
-                .anyRequest().authenticated()
+            .anyRequest().permitAll()
             );
 
         return http.build();
@@ -58,7 +50,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000", 
                 "http://127.0.0.1:3000",
-                "http://localhost:8080"
+                "http://localhost:8080",
+                "https://on-na-frontend-4f6phcztl-yujins-projects-b4804b20.vercel.app"
         )); 
         
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
