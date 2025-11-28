@@ -54,7 +54,7 @@ public class InMemoryClassService implements ClassService {
         c.setStartTime(LocalTime.of(14, 0));
         c.setEndTime(LocalTime.of(16, 0));
         c.setCapacity(5);
-        c.setPrice(0);
+        c.setPrice(30000);
         c.setHostId(1L);
 
         classes.put(c.getId(), c);

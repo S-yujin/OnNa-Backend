@@ -27,17 +27,20 @@ public class ReservationController {
     /**
      * 예약 생성
      * POST /api/reservations
-     *
-     * Request Body (JSON):
-     * {
-     *   "classId": 1,
-     *   "userId": 1,        // 지금은 더미 값, 나중에 토큰 기반으로 대체
-     *   "headCount": 2
-     * }
      */
     @PostMapping
     public Reservation create(@RequestBody CreateReservationRequest request) {
         return reservationService.createReservation(request);
+    }
+
+    /**
+     * 특정 예약 상세 조회
+     * GET /api/reservations/{id}
+     */
+    @GetMapping("/{id}")
+    public Reservation getReservation(@PathVariable Long id) {
+        // 💡 ID로 단일 예약 객체 조회 추가
+        return reservationService.getReservationById(id);
     }
 
     /**
@@ -53,11 +56,11 @@ public class ReservationController {
     }
 
     /**
-     * 특정 클래스의 예약 목록 조회 (관리자/호스트용)
-     * GET /api/reservations/class/{classId}
+     * 특정 클래스의 예약 목록 조회 (관리자용)
+     * GET /api/reservations/class?classId=1
      */
-    @GetMapping("/class/{classId}")
-    public List<Reservation> reservationsByClass(@PathVariable Long classId) {
+    @GetMapping("/class")
+    public List<Reservation> classReservations(@RequestParam Long classId) {
         return reservationService.getReservationsByClass(classId);
     }
 }

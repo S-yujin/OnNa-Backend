@@ -41,7 +41,7 @@ public class SecurityConfig {
                 // 🚀 (2) 클래스 목록 API 허용 (일반적으로 /api/classes를 사용한다고 가정)
                 // 만약 API 경로가 다르다면 이 부분을 수정해야 합니다.
                 .requestMatchers("/api/classes/**").permitAll() 
-                
+                .requestMatchers("/api/reservations/**").permitAll()
                 // ⚠️ 그 외 나머지 모든 요청은 반드시 인증이 필요함
                 .anyRequest().authenticated()
             );

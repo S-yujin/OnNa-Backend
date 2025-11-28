@@ -21,15 +21,29 @@ import java.util.stream.Collectors;
 @Slf4j
 public class InMemoryReservationService implements ReservationService {
 
+    // 💡 클래스의 현재 예약 인원을 저장하는 맵 (Class ID -> Current Count)
+    private final Map<Long, Integer> currentCounts = new HashMap<>();
+
     // id -> Reservation 저장
     private final Map<Long, Reservation> store = new HashMap<>();
     private final AtomicLong seq = new AtomicLong(0);
 
+    // 💡 초기화: 클래스 1번의 인원수를 0으로 시작 (테스트 용)
+    public InMemoryReservationService() {
+        currentCounts.put(1L, 0);
+    }
+
     @Override
     public Reservation createReservation(CreateReservationRequest request) {
+        Long classId = request.getClassId();
+        int headCount = request.getHeadCount();
+
+        // 💡 예약 시 클래스 인원 업데이트 로직
+        currentCounts.compute(classId, (key, count) -> (count == null ? 0 : count) + headCount);
+
         Reservation r = new Reservation();
         r.setId(seq.incrementAndGet());
-        r.setClassId(request.getClassId());
+        r.setClassId(classId);
         r.setUserId(
                 request.getUserId() != null
                         ? request.getUserId()
@@ -40,9 +54,16 @@ public class InMemoryReservationService implements ReservationService {
 
         store.put(r.getId(), r);
 
-        log.info("New reservation created: {}", r);
+        log.info("New reservation created: {} (Class {} new count: {})", r, classId, currentCounts.get(classId));
         return r;
     }
+
+    @Override
+    public Reservation getReservationById(Long id) {
+        // 💡 ID로 예약 객체를 찾아서 반환
+        return store.get(id);
+    }
+
 
     @Override
     public List<Reservation> getReservationsByUser(Long userId) {

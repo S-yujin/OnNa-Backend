@@ -16,6 +16,9 @@ public interface ReservationService {
     // 예약 생성
     Reservation createReservation(CreateReservationRequest request);
 
+    // 💡 추가: ID로 단일 예약 조회
+    Reservation getReservationById(Long id);
+
     // 특정 유저의 예약 목록 조회
     List<Reservation> getReservationsByUser(Long userId);
 
